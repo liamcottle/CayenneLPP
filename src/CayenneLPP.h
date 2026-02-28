@@ -51,6 +51,7 @@
 #define LPP_GPS 136                 // 3 byte lon/lat 0.0001 °, 3 bytes alt 0.01 meter
 #define LPP_SWITCH 142              // 1 byte, 0/1
 #define LPP_POLYLINE 240            // 1 byte size, 1 byte delta factor, 3 byte lon/lat 0.0001° * factor, n (size-8) bytes deltas
+#define LPP_KEY_VALUE 254           // 1 byte key length, x-bytes key, 1-byte value length, x-bytes value
 
 // Only Data Size
 #define LPP_DIGITAL_INPUT_SIZE 1
@@ -225,6 +226,9 @@ public:
                       const std::vector<std::pair<double, double>>& coords,
                       CayenneLPPPolyline::Precision precision = CayenneLPPPolyline::Prec0_0001,
                       CayenneLPPPolyline::Simplification simplification = CayenneLPPPolyline::DouglasPeucker);
+#endif
+#ifndef CAYENNE_DISABLE_KEY_VALUE
+  uint8_t addKeyValue(uint8_t channel, const char* key, uint8_t key_length, const char* value, uint8_t value_length);
 #endif
 
 protected:

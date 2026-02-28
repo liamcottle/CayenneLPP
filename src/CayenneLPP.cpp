@@ -134,6 +134,9 @@ bool CayenneLPP::isType(uint8_t type) {
 #ifndef ARDUINO
     case LPP_POLYLINE:
 #endif
+#ifndef CAYENNE_DISABLE_KEY_VALUE
+    case LPP_KEY_VALUE:
+#endif
       return true;
   }
 
@@ -272,6 +275,11 @@ const char * CayenneLPP::getTypeName(uint8_t type) {
 #ifndef CAYENNE_DISABLE_COLOUR
         case LPP_COLOUR:
           return "colour";
+#endif
+
+#ifndef CAYENNE_DISABLE_KEY_VALUE
+        case LPP_KEY_VALUE:
+          return "key_value";
 #endif
 
         default:
@@ -901,6 +909,37 @@ uint8_t CayenneLPP::addPolyline(uint8_t channel,
     _cursor += buffer.size();
 
     return _cursor;
+}
+#endif
+
+#ifndef CAYENNE_DISABLE_KEY_VALUE
+uint8_t CayenneLPP::addKeyValue(uint8_t channel, const char* key, uint8_t key_length, const char* value, uint8_t value_length) {
+    
+  // +1 byte for key length
+  // +1 byte for value length
+  uint32_t size = 1 + key_length + 1 + value_length;
+
+  // check buffer overflow
+  if((_cursor + size + 2) > _maxsize){
+      _error = LPP_ERROR_OVERFLOW;
+      return 0;
+  }
+
+  // header
+  _buffer[_cursor++] = channel;
+  _buffer[_cursor++] = LPP_KEY_VALUE;
+
+  // write key length and key
+  _buffer[_cursor++] = key_length;
+  memcpy(&_buffer[_cursor], key, key_length);
+  _cursor += key_length;
+
+  // write value length and value
+  _buffer[_cursor++] = value_length;
+  memcpy(&_buffer[_cursor], value, value_length);
+  _cursor += value_length;
+
+  return _cursor;
 }
 #endif
 
