@@ -228,7 +228,7 @@ public:
                       CayenneLPPPolyline::Simplification simplification = CayenneLPPPolyline::DouglasPeucker);
 #endif
 #ifndef CAYENNE_DISABLE_KEY_VALUE
-  uint8_t addKeyValue(uint8_t channel, const char* key, uint8_t key_length, const char* value, uint8_t value_length);
+  uint8_t addKeyValue(uint8_t channel, const char* key, const char* value);
 #endif
 
 protected:

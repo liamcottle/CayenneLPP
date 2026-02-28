@@ -913,10 +913,12 @@ uint8_t CayenneLPP::addPolyline(uint8_t channel,
 #endif
 
 #ifndef CAYENNE_DISABLE_KEY_VALUE
-uint8_t CayenneLPP::addKeyValue(uint8_t channel, const char* key, uint8_t key_length, const char* value, uint8_t value_length) {
+uint8_t CayenneLPP::addKeyValue(uint8_t channel, const char* key, const char* value) {
     
   // +1 byte for key length
   // +1 byte for value length
+  uint32_t key_length = strlen(key);
+  uint32_t value_length = strlen(value);
   uint32_t size = 1 + key_length + 1 + value_length;
 
   // check buffer overflow
